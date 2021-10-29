@@ -68,8 +68,8 @@ loop:
 		syscall
 		
 		beq	$10, $0, exit		# We found the null-byte
-		#addi	$10, $10, -4		# subracring 4 to get to previous index
-		sll 	$10, $9, 2			# convert "i" to word offset by multiplying by 4
+		addi	$10, $10, -4		# subracring 4 to get to previous index
+		
 		j	reverse_loop		# Loop until we reach our condition
 	
 	# addi	$7, $7, -1				# for(...; ...; i--)
