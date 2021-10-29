@@ -33,8 +33,12 @@ loop:
 	
 	sll 	$10, $9, 2			# convert "i" to word offset by multiplying by 4
 	lw	$10, a($10)			# load a[i]
+	
+	addi	$v0, $0, 1			
 	add	$10, $8, $0			# a[i] = $8 integer value + 0
+	add	$a0, $0, $10			
 	syscall
+	
 	addi 	$9, $9, 1			# for (...; ...; i++)
 	slt	$10, $9, $s0			# for (...; i < N;)
 	bne	$10, $0, loop			# loop if $10 is not not equal to 0
