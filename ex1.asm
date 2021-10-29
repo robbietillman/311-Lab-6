@@ -61,7 +61,7 @@ loop:
 		syscall
 
 		
-		addi	$9, $9, -1		#decrementing the counter
+		subi	$9, $9, 1		#decrementing the counter
 		#
 		addi	$v0, $0, 4		# preparing to print newline
 		la	$a0, newline		# printnig newline
