@@ -21,56 +21,59 @@ main:
    add	$s0, $0, $v0			# copy the column number into $s0
    
    li $s1 64				# $s1 will store the size of the array
-  
-##################################################################################
-##   Insert code here for changing appropriate * characters to |                ##
-##################################################################################
-  
+   
   addi 	$t2, $0, 8			# set register t2 to 8
   addi 	$t3, $0, 8			# set register t3 to 8
   addi	$t4, $0, 0			# counter var 1
   addi	$t5, $0, 0			# counter var 2
   li	$t6, 0				# counter var 3
+  j	innerLoop
+  
+##################################################################################
+##   Insert code here for changing appropriate * characters to |                ##
+##################################################################################
+
+
   
 innerLoop:
-  beq	$t6, $s0, charIndicator		# conditional to break to the | char
-  addi	$v0, $0, 4			# preparing to load a char
-  la	$a0, displayChar		# loading a char's address
-  syscall				# printing a char
-  addi	$t6, $t6, 1			# adding 1 to counter var
-  beq	$t6, $t3, outerLoop		# conditional to break loop and go to outer loop
- 
-  j	innerLoop			# looping mechanism
+
+  beq	$t4, $s1, exit
+  beq	$t5, $s0, charIndicator
+  beq	$t1, $t2, print_new_line	# preparing to load a char
+  
+  addi	$v0, $0, 11
+  lb	$a0, display($t4)
+  syscall
+  
+  addi	$t5, $t5, 1
+  addi	$t4, $t4, 1
+  j	innerLoop
   
 charIndicator:
-  addi	$v0, $0, 4			# preparing to print new char
-  la	$a0, lineChar			# loading lineChar into memory
-  syscall				# printing lineChar
-  addi	$t6, $t6, 1			# adding 1 to counter variable
-  beq	$t6, $t3, outerLoop		# condiitonal to break loop and start printing *
+ 
+  lb	$a1, lineChar			# set register t2 to 8
+  sb 	$a1, display($t4)		# set register t3 to 64
   
-  j innerLoop				# jumps to innerLoop
+  addi	$v0, $0, 11			# syscall for adding to memory
+  lb	$a0, display($t4)		# loading byte to memory
+  syscall				# print *
   
-outerLoop:
-  addi	$v0, $0, 4			# preparing to print new char
-  la	$a0, newline			# loading newline into memory
-  syscall				# printing newline
-  addi	$t5, $t5, 1			# adding 1 to counter var
-  li	$t6, 0				# loading an immediate value of 0 in $t6 reg
-  beq	$t5, $t2, exit			# conditional to break loop if $t5 (0) gets tp $t2 (10)
-  
-  j	innerLoop			# looping mechanism
+  addi	$t5, $t5, 1
+  addi	$t4, $t4, 1
+  j	innerLoop
+
 ##################################################################################
 ##   Insert code here for printing thre resulting display.                      ##
 ##   The code for printing a new line character is given to you.		##
 ##################################################################################  
 
-  
 print_new_line:
-	addi $v0, $0, 11
-	lb $a0, newline
+	addi	$v0, $0, 11
+	lb	$a0, newline
 	syscall
-	
+	beq	$t4, $s1, exit
+	add	$t1, $0, $0
+
 	j innerLoop
 
 # Exit from the program
