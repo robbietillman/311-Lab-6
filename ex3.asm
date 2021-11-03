@@ -53,7 +53,7 @@ setRange:
   add	$t7, $s1, $0
   sub	$t7, $t7, $s0
   add	$t8, $t9, $0
-  div	$t7, $t7, $t8
+  div	$t7, $t7, $t9
   lw	$t1, array($t4)
   sub	$t1, $t1, $t9
   mul	$t1, $t7, $t1
@@ -78,7 +78,7 @@ output:
   
 converge:
   beq	$t6, $s2, exit
-  beq	$t5, $t3, output
+  beq	$t5, $t3, print_new_line
   j setRange
   
 print_new_line:
