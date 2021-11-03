@@ -39,7 +39,7 @@ innerLoop:
 
   beq	$t4, $s1, exit
   beq	$t5, $s0, charIndicator
-  beq	$t1, $t2, print_new_line	# preparing to load a char
+  beq	$t5, $t2, print_new_line	# preparing to load a char
   
   addi	$v0, $0, 11
   lb	$a0, display($t4)
@@ -71,8 +71,8 @@ print_new_line:
 	addi	$v0, $0, 11
 	lb	$a0, newline
 	syscall
-	beq	$t4, $s1, exit
-	add	$t1, $0, $0
+	beq	$t6, $s1, exit
+	add	$t5, $0, $0
 
 	j innerLoop
 
