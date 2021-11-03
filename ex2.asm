@@ -27,7 +27,7 @@ main:
   addi	$t4, $0, 0			# counter var 1
   addi	$t5, $0, 0			# counter var 2
   li	$t6, 0				# counter var 3
-  j	innerLoop
+  j	innerLoop			# START PROGRAM
   
 ##################################################################################
 ##   Insert code here for changing appropriate * characters to |                ##
@@ -37,30 +37,30 @@ main:
   
 innerLoop:
 
-  beq	$t4, $s1, exit
-  beq	$t5, $s0, charIndicator
+  beq	$t4, $s1, exit			# exit if counter = end of array
+  beq	$t5, $s0, charIndicator		# print char if coutner = indicated column number
   beq	$t5, $t2, print_new_line	# preparing to load a char
   
-  addi	$v0, $0, 11
-  lb	$a0, display($t4)
-  syscall
+  addi	$v0, $0, 11			# prep to print char
+  lb	$a0, display($t4)		# load char
+  syscall				# print char
   
-  addi	$t5, $t5, 1
-  addi	$t4, $t4, 1
-  j	innerLoop
+  addi	$t5, $t5, 1			# advance counter
+  addi	$t4, $t4, 1			# advance counter
+  j	innerLoop			# looping mechanism
   
 charIndicator:
  
-  lb	$a1, lineChar			# set register t2 to 8
-  sb 	$a1, display($t4)		# set register t3 to 64
+  lb	$a1, lineChar			# load lineChar
+  sb 	$a1, display($t4)		# store the lineChar in the indicated position of the 64-bit output string
   
   addi	$v0, $0, 11			# syscall for adding to memory
   lb	$a0, display($t4)		# loading byte to memory
   syscall				# print *
   
-  addi	$t5, $t5, 1
-  addi	$t4, $t4, 1
-  j	innerLoop
+  addi	$t5, $t5, 1			# incremement counter
+  addi	$t4, $t4, 1			# increment counter
+  j	innerLoop			# looping mechanism
 
 ##################################################################################
 ##   Insert code here for printing thre resulting display.                      ##
@@ -68,13 +68,13 @@ charIndicator:
 ##################################################################################  
 
 print_new_line:
-	addi	$v0, $0, 11
-	lb	$a0, newline
-	syscall
-	beq	$t6, $s1, exit
-	add	$t5, $0, $0
+	addi	$v0, $0, 11		# prep to print newLine char
+	lb	$a0, newline		# load newLine char
+	syscall				# print newLine char
+	beq	$t6, $s1, exit		# exit if counter = 64
+	add	$t5, $0, $0		# set t5 counter back to 0
 
-	j innerLoop
+	j innerLoop			# looping mechanism
 
 # Exit from the program
 exit:

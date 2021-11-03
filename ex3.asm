@@ -38,10 +38,10 @@ main:
   addi	$t4, $0, 0			# counter var 1
   addi	$t5, $0, 0			# counter var 2
   addi	$t6, $0, 0			# counter var 3
-  addi	$t7, $0, 0
-  addi	$t8, $0, 0
+  addi	$t7, $0, 0			# counter var 4
+  addi	$t8, $0, 0			# counter var 5
   addi 	$t9, $0, 20			# temp
-  addi	$t2, $0, 1
+  addi	$t2, $0, 1			# register set to 1
    
    
 ##################################################################################
@@ -50,45 +50,45 @@ main:
    
 setRange:
 
-  add	$t7, $s1, $0
-  sub	$t7, $t7, $s0
-  add	$t8, $t9, $0
-  div	$t7, $t7, $t9
-  lw	$t1, array($t4)
-  sub	$t1, $t1, $t9
-  mul	$t1, $t7, $t1
-  add	$t1, $t1, $s0
-  sw	$t1, array($t4)
+  add	$t7, $s1, $0			# setting t7 to new maximum value
+  sub	$t7, $t7, $s0			# setting t7 to new max - min vals
+  add	$t8, $t9, $0			# setting t8 to max - min
+  div	$t7, $t7, $t9			# dividing old vals by new vals
+  lw	$t1, array($t4)			# loading word from memory
+  sub	$t1, $t1, $t9			# setting t1 to loaded word - min
+  mul	$t1, $t7, $t1			# multiplying old values by new ones 
+  add	$t1, $t1, $s0			# adding new min to old values
+  sw	$t1, array($t4)			# storing new value
   
-  j	output
+  j	output				# looping mechanism
   
 output:
-  addi	$v0, $0, 1
-  lw	$a0, array($t4)
-  syscall
+  addi	$v0, $0, 1			# prep to print int
+  lw	$a0, array($t4)			# load int
+  syscall				# ptint int
   
-  addi	$v0, $0, 11
-  lb	$a0, spaceChar
-  syscall
+  addi	$v0, $0, 11			# prep to print spec char
+  lb	$a0, spaceChar			# load char
+  syscall				# print char
   
   add	$t5, $t2, $t5			# temp
   add	$t6, $t6, $t2			# temp
-  add	$t4, $t4, $t3			# slight temp
-  j converge
+  add	$t4, $t4, $t3			# temp
+  j converge				# looping mechanism
   
 converge:
-  beq	$t6, $s2, exit
-  beq	$t5, $t3, print_new_line
+  beq	$t6, $s2, exit			# exit if loop is done
+  beq	$t5, $t3, print_new_line	# print new line if t5 = 4
   j setRange
   
 print_new_line:
-  addi 	$v0, $0, 11
-  lb	$a0, newline
-  syscall
-  beq	$t6, $s1, exit
-  add	$t5, $0, $0
-  j converge
-  
+  addi 	$v0, $0, 11			# prep to print char
+  lb	$a0, newline			# load char
+  syscall				# print char
+  beq	$t6, $s1, exit			# condition to break loop
+  add	$t5, $0, $0			# set counter to 0
+  j converge				# looping mechanism
+  		
   
   
   
