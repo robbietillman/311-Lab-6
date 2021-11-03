@@ -40,7 +40,8 @@ main:
   addi	$t6, $0, 0			# counter var 3
   addi	$t7, $0, 0
   addi	$t8, $0, 0
-  addi $t9, $0, 20			# temp
+  addi 	$t9, $0, 20			# temp
+  addi	$t2, $0, 1
    
    
 ##################################################################################
@@ -58,6 +59,36 @@ setRange:
   mul	$t1, $t7, $t1
   add	$t1, $t1, $s0
   sw	$t1, array($t4)
+  
+  j	output
+  
+output:
+  addi	$v0, $0, 1
+  lw	$a0, array($t4)
+  syscall
+  
+  addi	$v0, $0, 11
+  lb	$a0, spaceChar
+  syscall
+  
+  add	$t5, $t2, $t5			# temp
+  add	$t6, $t6, $t2			# temp
+  add	$t4, $t4, $t3			# slight temp
+  j converge
+  
+converge:
+  beq	$t6, $s2, exit
+  beq	$t5, $t3, output
+  j setRange
+  
+print_new_line:
+  addi 	$v0, $0, 11
+  lb	$a0, newline
+  syscall
+  beq	$t6, $s1, exit
+  add	$t5, $0, $0
+  j converge
+  
   
   
   
